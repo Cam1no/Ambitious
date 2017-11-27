@@ -144,26 +144,6 @@ Style/PercentLiteralDelimiters:
 inherit_from: .rubocop_todo.yml
 YAML
 
-# if yes?("Download bootstrap?")
-#   run "wget https://github.com/twbs/bootstrap/archive/v3.0.0.zip -O bootstrap.zip -O bootstrap.zip"
-#   run "unzip bootstrap.zip -d bootstrap && rm bootstrap.zip"
-#   run "cp bootstrap/bootstrap-3.0.0/dist/css/bootstrap.css vendor/assets/stylesheets/"
-#   run "cp bootstrap/bootstrap-3.0.0/dist/js/bootstrap.js vendor/assets/javascripts/"
-#   run "rm -rf bootstrap"
-#   run "echo '@import \"bootstrap\";' >>  app/assets/stylesheets/application.css.scss"
-# end
-#
-# # Font-awesome: Install from http://fortawesome.github.io/Font-Awesome/
-# # ==================================================
-# if yes?("Download font-awesome?")
-#   run "wget http://fontawesome.io/assets/font-awesome-4.1.0.zip -O font-awesome.zip"
-#   run "unzip font-awesome.zip && rm font-awesome.zip && mv font-awesome-4.1.0 font-awesome"
-#   run "cp font-awesome/css/font-awesome.css vendor/assets/stylesheets/"
-#   run "cp -r font-awesome/fonts public/fonts"
-#   run "rm -rf font-awesome"
-#   run "echo '@import \"font-awesome\";' >>  app/assets/stylesheets/application.css.scss"
-# end
-
 run "cat << EOF >> .gitignore
 /.bundle
 /db/*.sqlite3

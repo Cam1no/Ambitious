@@ -78,3 +78,30 @@ run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml
 # Use SASS extension for application.css
 run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.css.scss"
 
+# config/application.rb
+application do
+  %q{
+    config.time_zone = 'Tokyo'
+    I18n.enforce_available_locales = true
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
+    config.i18n.default_locale = :en
+    config.generators do |g|
+      g.orm :active_record
+      g.template_engine :slim
+      g.test_framework :rspec, :fixture => true
+      g.fixture_replacement :factory_girl, :dir => 'spec/factories'
+      g.view_specs false
+      g.controller_specs true
+      g.routing_specs false
+      g.helper_specs false
+      g.request_specs false
+      g.stylesheets false
+      g.javascripts false
+      g.assets false
+      g.helper false
+    end
+    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir['#{config.root}/lib/**/']
+  }
+end
+

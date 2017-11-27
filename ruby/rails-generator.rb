@@ -116,3 +116,21 @@ insert_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
     Bullet.rails_logger = true
   end
 RUBY
+
+# set up rubocop
+create_file '.rubocop.yml', <<YAML
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'bin/*'
+    - 'config/**/*'
+    - 'Gemfile'
+    - 'db/**/*'
+    - 'spec/spec_helper.rb'
+  RunRailsCops: true
+  DisplayCopNames: true
+
+Style/Documentation:
+  Enabled: false
+YAML
+

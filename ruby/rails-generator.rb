@@ -1,20 +1,28 @@
 # encoding: UTF-8
 
+# 参考
+# http://morizyun.github.io/blog/rails5-application-templates/index.html
 
 # ==================
 # GEMS
 # ==================
 
 gem 'mysql2'
-gem "rails-i18n"
+gem 'rails-i18n'
 gem 'whenever', require: false
 gem 'slim-rails'
 gem 'kaminari'
 gem 'active_model_serializers'
-gem 'webpacker', github: 'rails/webpacker'
+gem 'webpacker'
 gem 'sass-rails'
 gem 'puma'
 gem 'draper'
+gem 'ransack'
+
+# image
+gem 'refile', require: 'refile/rails', github: 'manfe/refile'
+gem 'refile-mini_magick'
+gem 'refile-s3'
 
 gem_group :development, :test do
   # Pry
@@ -25,14 +33,15 @@ gem_group :development, :test do
   gem 'pry-stack_explorer'
 
   # rspec
-  gem "rspec-rails"
+  gem 'rspec-rails'
   gem 'timecop'
-  gem "factory_girl_rails"
+  gem 'factory_girl_rails'
+  gem "database_cleaner"
 
   # other
   gem 'rubocop'
   gem 'dotenv-rails'
-  gem "simplecov", require: false
+  gem 'simplecov', require: false
 end
 
 gem_group :development, :staging do
@@ -47,3 +56,6 @@ gem_group :development do
   gem 'xray-rails'
   gem 'view_source_map'
 end
+
+# install gems
+run 'bundle install --path vendor/bundle --jobs=4'

@@ -233,8 +233,22 @@ RUBY
 run "bundle exec guard init rspec"
 # convert erb file to slim
 run 'bundle exec erb2slim -d app/views'
-run "bundle exec rubocop -a --auto-gen-config"
+
+# setting frontend
+front_resorce = ask("choise front-end 'react' or 'vue' or 'none' ")
+case front_resorce
+when 'none'
+  return
+when 'react'
+  run 'bundle exec rails webpacker:install'
+  run 'bundle exec rails webpacker:install:react'
+when 'vue'
+  run 'bundle exec rails webpacker:install'
+  run 'bundle exec rails webpacker:install:vue'
+end
+
 run 'bundle exec spring binstub --all'
+run "bundle exec rubocop -a --auto-gen-config"
 
 if yes? "Do you delete .git/?"
   run 'rm -rf .git/'

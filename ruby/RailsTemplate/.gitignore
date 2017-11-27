@@ -35,3 +35,6 @@ doc/
 .idea
 .secret
 .DS_Store
+/public/packs
+/public/packs-test
+/node_modules

@@ -235,16 +235,16 @@ run "bundle exec guard init rspec"
 run 'bundle exec erb2slim -d app/views'
 
 # setting frontend
-front_resorce = ask("choise front-end 'react' or 'vue' or 'none' ")
+front_resorce = ask("choise front-end 'none:1' or 'vue:2' or 'react:3' ")
 case front_resorce
-when 'none'
+when 1
   return
-when 'react'
-  run 'bundle exec rails webpacker:install'
-  run 'bundle exec rails webpacker:install:react'
-when 'vue'
+when 2
   run 'bundle exec rails webpacker:install'
   run 'bundle exec rails webpacker:install:vue'
+when 3
+  run 'bundle exec rails webpacker:install'
+  run 'bundle exec rails webpacker:install:react'
 end
 
 run 'bundle exec spring binstub --all'

@@ -118,6 +118,7 @@ insert_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
   end
 RUBY
 
+run 'rm -rf test'
 # set up rubocop
 create_file '.rubocop.yml', <<YAML
 AllCops:

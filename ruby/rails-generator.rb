@@ -59,3 +59,9 @@ end
 
 # install gems
 run 'bundle install --path vendor/bundle --jobs=4'
+
+# devise
+if yes? "Do you use devise?"
+  gem "devise"
+  generate "devise:install"
+end

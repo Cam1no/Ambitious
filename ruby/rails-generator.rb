@@ -55,6 +55,11 @@ gem_group :development do
   gem 'html2slim'
   gem 'xray-rails'
   gem 'view_source_map'
+  # guard
+  gem 'guard-rspec', require: false
+  gem 'guard-rubocop'
+  gem 'terminal-notifier'
+  gem 'terminal-notifier-guard'
 end
 
 # install gems

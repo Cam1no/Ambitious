@@ -65,3 +65,7 @@ if yes? "Do you use devise?"
   gem "devise"
   generate "devise:install"
 end
+
+# convert erb file to slim
+run 'bundle exec erb2slim -d app/views'
+

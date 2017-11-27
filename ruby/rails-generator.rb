@@ -157,3 +157,8 @@ if yes?("Download font-awesome?")
   run "rm -rf font-awesome"
   run "echo '@import \"font-awesome\";' >>  app/assets/stylesheets/application.css.scss"
 end
+
+# git
+git :init
+git add: '.'
+git commit: '-m 'Initial commit''

@@ -192,6 +192,10 @@ after_bundle do
   run 'bundle exec spring start'
 end
 
+if yes? "Do you delete .git/?"
+  run 'rm -rf .git/'
+end
+
 
 # git
 # after_bundle do

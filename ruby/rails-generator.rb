@@ -105,3 +105,14 @@ application do
   }
 end
 
+# config/environments/development.rb
+insert_into_file 'config/environments/development.rb', <<RUBY, after: 'config.assets.debug = true'
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+  end
+RUBY

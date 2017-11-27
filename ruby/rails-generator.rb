@@ -37,6 +37,8 @@ gem_group :development, :test do
   gem 'timecop'
   gem 'factory_girl_rails'
   gem "database_cleaner"
+  gem 'vcr'
+  gem 'database_rewinder'
 
   # other
   gem 'rubocop'
@@ -179,18 +181,60 @@ doc/
 .DS_Store
 EOF"
 
+run 'bundle install --path vendor/bundle --jobs=4'
+run 'bundle exec spring stop'
+
 # setting
-after_bundle do
-  run 'bundle update'
-  run 'bundle exec spring stop'
-  run 'bundle exec rails g rspec:install'
-  # Initialize guard
-  run "bundle exec guard init rspec"
-  # convert erb file to slim
-  run 'bundle exec erb2slim -d app/views'
-  run "bundle exec rubocop -a --auto-gen-config"
-  run 'bundle exec spring binstub --all'
-end
+run 'bundle update'
+
+# ===================
+# Setting Rspec
+# ===================
+run 'bundle exec rails g rspec:install'
+create_file '.rspec', <<EOF, force: true
+--color -f d -r turnip/rspec
+EOF
+
+insert_into_file 'spec/spec_helper.rb', <<RUBY, before: 'RSpec.configure do |config|'
+require 'factory_girl_rails'
+require 'vcr'
+
+RUBY
+
+insert_into_file 'spec/spec_helper.rb', <<RUBY, after: 'RSpec.configure do |config|'
+
+  config.before :suite do
+    DatabaseRewinder.clean_all
+  end
+
+  config.after :each do
+    DatabaseRewinder.clean
+  end
+
+  config.before :all do
+    FactoryGirl.reload
+    FactoryGirl.factories.clear
+    FactoryGirl.sequences.clear
+    FactoryGirl.find_definitions
+  end
+
+  config.include FactoryGirl::Syntax::Methods
+
+  VCR.configure do |c|
+    c.cassette_library_dir = 'spec/vcr'
+    c.hook_into :webmock
+    c.allow_http_connections_when_no_cassette = true
+  end
+RUBY
+
+
+
+# Initialize guard
+run "bundle exec guard init rspec"
+# convert erb file to slim
+run 'bundle exec erb2slim -d app/views'
+run "bundle exec rubocop -a --auto-gen-config"
+run 'bundle exec spring binstub --all'
 
 if yes? "Do you delete .git/?"
   run 'rm -rf .git/'

@@ -13,7 +13,33 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'factory_girl_rails'
+require 'vcr'
+
 RSpec.configure do |config|
+  config.before :suite do
+    DatabaseRewinder.clean_all
+  end
+
+  config.after :each do
+    DatabaseRewinder.clean
+  end
+
+  config.before :all do
+    FactoryGirl.reload
+    FactoryGirl.factories.clear
+    FactoryGirl.sequences.clear
+    FactoryGirl.find_definitions
+  end
+
+  config.include FactoryGirl::Syntax::Methods
+
+  VCR.configure do |c|
+    c.cassette_library_dir = 'spec/vcr'
+    c.hook_into :webmock
+    c.allow_http_connections_when_no_cassette = true
+  end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

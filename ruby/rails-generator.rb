@@ -6,7 +6,6 @@
 # ==================
 # GEMS
 # ==================
-
 gem 'mysql2'
 gem 'rails-i18n'
 gem 'whenever', require: false
@@ -62,27 +61,15 @@ gem_group :development do
   gem 'terminal-notifier-guard'
 end
 
-# install gems
-run 'bundle install --path vendor/bundle --jobs=4'
-
 # devise
 if yes? "Do you use devise?"
   gem "devise"
-  generate "devise:install"
 end
-
-# convert erb file to slim
-run 'bundle exec erb2slim -d app/views'
-
 
 # install locales
 remove_file 'config/locales/en.yml'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/en.yml -P config/locales/'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml -P config/locales/'
-
-# Initialize guard
-# ==================================================
-run "bundle exec guard init rspec"
 
 # Use SASS extension for application.css
 run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.css.scss"
@@ -93,7 +80,7 @@ application do
     config.time_zone = 'Tokyo'
     I18n.enforce_available_locales = true
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
-    config.i18n.default_locale = :en
+    config.i18n.default_locale = :ja
     config.generators do |g|
       g.orm :active_record
       g.template_engine :slim
@@ -136,41 +123,70 @@ AllCops:
     - 'Gemfile'
     - 'db/**/*'
     - 'spec/spec_helper.rb'
-  RunRailsCops: true
-  DisplayCopNames: true
-
+Rails:
+  Enabled: true
 Style/Documentation:
   Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/AsciiComments:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  Enabled: false
+inherit_from: .rubocop_todo.yml
 YAML
 
-# Bootstrap: install from https://github.com/twbs/bootstrap
-# Note: This is 3.0.0
-# ==================================================
-if yes?("Download bootstrap?")
-  run "wget https://github.com/twbs/bootstrap/archive/v3.0.0.zip -O bootstrap.zip -O bootstrap.zip"
-  run "unzip bootstrap.zip -d bootstrap && rm bootstrap.zip"
-  run "cp bootstrap/bootstrap-3.0.0/dist/css/bootstrap.css vendor/assets/stylesheets/"
-  run "cp bootstrap/bootstrap-3.0.0/dist/js/bootstrap.js vendor/assets/javascripts/"
-  run "rm -rf bootstrap"
-  run "echo '@import \"bootstrap\";' >>  app/assets/stylesheets/application.css.scss"
-  run "rails g simple_form:install --bootstrap"
+# if yes?("Download bootstrap?")
+#   run "wget https://github.com/twbs/bootstrap/archive/v3.0.0.zip -O bootstrap.zip -O bootstrap.zip"
+#   run "unzip bootstrap.zip -d bootstrap && rm bootstrap.zip"
+#   run "cp bootstrap/bootstrap-3.0.0/dist/css/bootstrap.css vendor/assets/stylesheets/"
+#   run "cp bootstrap/bootstrap-3.0.0/dist/js/bootstrap.js vendor/assets/javascripts/"
+#   run "rm -rf bootstrap"
+#   run "echo '@import \"bootstrap\";' >>  app/assets/stylesheets/application.css.scss"
+# end
+#
+# # Font-awesome: Install from http://fortawesome.github.io/Font-Awesome/
+# # ==================================================
+# if yes?("Download font-awesome?")
+#   run "wget http://fontawesome.io/assets/font-awesome-4.1.0.zip -O font-awesome.zip"
+#   run "unzip font-awesome.zip && rm font-awesome.zip && mv font-awesome-4.1.0 font-awesome"
+#   run "cp font-awesome/css/font-awesome.css vendor/assets/stylesheets/"
+#   run "cp -r font-awesome/fonts public/fonts"
+#   run "rm -rf font-awesome"
+#   run "echo '@import \"font-awesome\";' >>  app/assets/stylesheets/application.css.scss"
+# end
+
+run "cat << EOF >> .gitignore
+/.bundle
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/log/*.log
+/tmp
+database.yml
+doc/
+/vendor/bundle
+*.swp
+*~
+.project
+.idea
+.secret
+.DS_Store
+EOF"
+
+# setting
+after_bundle do
+  run 'bundle update'
+  # Initialize guard
+  run "bundle exec guard init rspec"
+  # convert erb file to slim
+  run 'bundle exec erb2slim -d app/views'
+  run "bundle exec rubocop -a --auto-gen-config"
 end
 
-# Font-awesome: Install from http://fortawesome.github.io/Font-Awesome/
-# ==================================================
-if yes?("Download font-awesome?")
-  run "wget http://fontawesome.io/assets/font-awesome-4.1.0.zip -O font-awesome.zip"
-  run "unzip font-awesome.zip && rm font-awesome.zip && mv font-awesome-4.1.0 font-awesome"
-  run "cp font-awesome/css/font-awesome.css vendor/assets/stylesheets/"
-  run "cp -r font-awesome/fonts public/fonts"
-  run "rm -rf font-awesome"
-  run "echo '@import \"font-awesome\";' >>  app/assets/stylesheets/application.css.scss"
-end
-
-# run rubocop
-run "bundle exec rubocop -a"
 
 # git
-git :init
-git add: '.'
-git commit: "-m 'Initial commit'"
+# after_bundle do
+#   git :init
+#   git add: "."
+#   git commit: %Q{ -m 'Initial commit' }
+# end

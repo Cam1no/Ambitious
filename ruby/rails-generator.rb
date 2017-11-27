@@ -75,6 +75,10 @@ remove_file 'config/locales/en.yml'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/en.yml -P config/locales/'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml -P config/locales/'
 
+# Initialize guard
+# ==================================================
+run "bundle exec guard init rspec"
+
 # Use SASS extension for application.css
 run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.css.scss"
 

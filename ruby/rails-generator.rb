@@ -167,6 +167,9 @@ if yes?("Download font-awesome?")
   run "echo '@import \"font-awesome\";' >>  app/assets/stylesheets/application.css.scss"
 end
 
+# run rubocop
+run "bundle exec rubocop -a"
+
 # git
 git :init
 git add: '.'

@@ -189,7 +189,7 @@ after_bundle do
   # convert erb file to slim
   run 'bundle exec erb2slim -d app/views'
   run "bundle exec rubocop -a --auto-gen-config"
-  run 'bundle exec spring start'
+  run 'bundle exec spring binstub --all'
 end
 
 if yes? "Do you delete .git/?"

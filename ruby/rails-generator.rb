@@ -33,6 +33,7 @@ gem_group :development, :test do
 
   # rspec
   gem 'rspec-rails'
+  gem 'rails-controller-testing'
   gem 'timecop'
   gem 'factory_girl_rails'
   gem "database_cleaner"
@@ -54,6 +55,10 @@ gem_group :development do
   gem 'html2slim'
   gem 'xray-rails'
   gem 'view_source_map'
+  gem 'bundler-audit'
+  gem 'brakeman'
+  gem 'rack-mini-profiler'
+  gem 'rufo'
   # guard
   gem 'guard-rspec', require: false
   gem 'guard-rubocop'
@@ -176,11 +181,14 @@ EOF"
 # setting
 after_bundle do
   run 'bundle update'
+  run 'bundle exec spring stop'
+  run 'bundle exec rails g rspec:install'
   # Initialize guard
   run "bundle exec guard init rspec"
   # convert erb file to slim
   run 'bundle exec erb2slim -d app/views'
   run "bundle exec rubocop -a --auto-gen-config"
+  run 'bundle exec spring start'
 end
 
 

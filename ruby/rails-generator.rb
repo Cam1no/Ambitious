@@ -39,7 +39,7 @@ gem_group :development, :test do
   gem 'rspec-rails'
   gem 'rails-controller-testing'
   gem 'timecop'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem "database_cleaner"
   gem 'vcr'
   gem 'database_rewinder'
@@ -96,7 +96,7 @@ application do
       g.orm :active_record
       g.template_engine :slim
       g.test_framework :rspec, :fixture => true
-      g.fixture_replacement :factory_girl, :dir => 'spec/factories'
+      g.fixture_replacement :factory_bot, :dir => 'spec/factories'
       g.view_specs false
       g.controller_specs true
       g.routing_specs false
@@ -217,7 +217,7 @@ create_file '.rspec', <<EOF, force: true
 EOF
 
 insert_into_file 'spec/spec_helper.rb', <<RUBY, before: 'RSpec.configure do |config|'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'vcr'
 
 RUBY
@@ -233,13 +233,13 @@ insert_into_file 'spec/spec_helper.rb', <<RUBY, after: 'RSpec.configure do |conf
   end
 
   config.before :all do
-    FactoryGirl.reload
-    FactoryGirl.factories.clear
-    FactoryGirl.sequences.clear
-    FactoryGirl.find_definitions
+    FactoryBot.reload
+    FactoryBot.factories.clear
+    FactoryBot.sequences.clear
+    FactoryBot.find_definitions
   end
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   VCR.configure do |c|
     c.cassette_library_dir = 'spec/vcr'

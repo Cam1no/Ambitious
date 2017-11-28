@@ -26,13 +26,13 @@ RSpec.configure do |config|
   end
 
   config.before :all do
-    FactoryGirl.reload
-    FactoryGirl.factories.clear
-    FactoryGirl.sequences.clear
-    FactoryGirl.find_definitions
+    FactoryBot.reload
+    FactoryBot.factories.clear
+    FactoryBot.sequences.clear
+    FactoryBot.find_definitions
   end
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   VCR.configure do |c|
     c.cassette_library_dir = 'spec/vcr'

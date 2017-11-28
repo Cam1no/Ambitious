@@ -16,16 +16,18 @@
 require 'factory_bot_rails'
 require 'vcr'
 require 'simplecov'
+require "webmock/rspec"
+
 SimpleCov.start 'rails'
 
 RSpec.configure do |config|
-  config.before :suite do
-    DatabaseRewinder.clean_all
-  end
-
-  config.after :each do
-    DatabaseRewinder.clean
-  end
+  # config.before :suite do
+  #   DatabaseRewinder.clean_all
+  # end
+  #
+  # config.after :each do
+  #   DatabaseRewinder.clean
+  # end
 
   config.before :all do
     FactoryBot.reload

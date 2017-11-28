@@ -76,6 +76,7 @@ group :development, :test do
   gem 'hirb-unicode'
   gem 'rspec-rails'
   gem 'rails-controller-testing'
+  gem 'webmock'
   gem 'timecop'
   gem 'factory_bot_rails'
   gem 'database_cleaner'
@@ -103,8 +104,14 @@ group :development do
   gem 'rufo'
   gem 'guard-rspec', require: false
   gem 'guard-rubocop'
+  gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'
+end
+
+group :production do
+  gem 'pg'
+  gem 'rails_12factor'
 end
 
 gem 'devise'

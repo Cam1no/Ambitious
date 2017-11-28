@@ -38,6 +38,7 @@ gem_group :development, :test do
   # rspec
   gem 'rspec-rails'
   gem 'rails-controller-testing'
+  gem 'webmock'
   gem 'timecop'
   gem 'factory_bot_rails'
   gem "database_cleaner"
@@ -68,8 +69,14 @@ gem_group :development do
   # guard
   gem 'guard-rspec', require: false
   gem 'guard-rubocop'
+  gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'
+end
+
+gem_group :production do
+  gem 'pg'
+  gem 'rails_12factor'
 end
 
 # devise
@@ -220,27 +227,29 @@ run 'bundle update'
 # Setting Rspec
 # ===================
 run 'bundle exec rails g rspec:install'
-create_file '.rspec', <<EOF, force: true
---color -f d -r turnip/rspec
-EOF
+# create_file '.rspec', <<EOF, force: true
+# --color -f d -r turnip/rspec
+# EOF
 
 insert_into_file 'spec/spec_helper.rb', <<RUBY, before: 'RSpec.configure do |config|'
 require 'factory_bot_rails'
 require 'vcr'
 require 'simplecov'
+require "webmock/rspec"
+
 SimpleCov.start 'rails'
 
 RUBY
 
 insert_into_file 'spec/spec_helper.rb', <<RUBY, after: 'RSpec.configure do |config|'
 
-  config.before :suite do
-    DatabaseRewinder.clean_all
-  end
-
-  config.after :each do
-    DatabaseRewinder.clean
-  end
+  # config.before :suite do
+  #   DatabaseRewinder.clean_all
+  # end
+  #
+  # config.after :each do
+  #   DatabaseRewinder.clean
+  # end
 
   config.before :all do
     FactoryBot.reload

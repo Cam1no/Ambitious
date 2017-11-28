@@ -265,6 +265,10 @@ run 'bundle exec erb2slim -d app/views'
 # setting whenever
 run 'bundle exec wheneverize .'
 
+run 'mkdir app/services'
+run 'mkdir app/tasks'
+run 'mkdir app/serializers'
+
 # setting frontend
 front_resorce = ask("choise front-end 'none:1' or 'vue:2' or 'react:3' ")
 case front_resorce

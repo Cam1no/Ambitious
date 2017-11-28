@@ -157,6 +157,7 @@ run "cat << EOF >> .gitignore
 database.yml
 doc/
 /vendor/bundle
+/coverage
 *.swp
 *~
 .project
@@ -204,6 +205,10 @@ RUBY
 
 # dotenv-rails
 run 'touch .env'
+
+create_file '.ruby-version', <<EOF
+2.4.1
+EOF
 
 run 'bundle install --path vendor/bundle --jobs=4'
 run 'bundle exec spring stop'

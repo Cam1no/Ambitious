@@ -29,6 +29,7 @@
 database.yml
 doc/
 /vendor/bundle
+/coverage
 *.swp
 *~
 .project

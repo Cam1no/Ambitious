@@ -249,6 +249,8 @@ insert_into_file 'spec/spec_helper.rb', <<RUBY, after: 'RSpec.configure do |conf
 RUBY
 
 
+# setting kaminari
+run 'bundle exec rails g kaminari:config'
 
 # Initialize guard
 run "bundle exec guard init rspec"

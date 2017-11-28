@@ -165,7 +165,7 @@ doc/
 .DS_Store
 EOF"
 
-run 'cat << EOF >> .pryrc
+create_file '.pryrc', <<RUBY
 # awesome_print
 begin
   require "awesome_print"
@@ -200,7 +200,10 @@ if defined? Hirb
 
   Hirb.enable
 end
-EOF'
+RUBY
+
+# dotenv-rails
+run 'touch .env'
 
 run 'bundle install --path vendor/bundle --jobs=4'
 run 'bundle exec spring stop'

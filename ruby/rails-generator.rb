@@ -117,9 +117,9 @@ insert_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
 
   config.after_initialize do
     Bullet.enable = true
-    Bullet.alert = false
     Bullet.bullet_logger = true
-    Bullet.console = true
+    Bullet.console = false
+    Bullet.add_footer = false
     Bullet.rails_logger = true
   end
 RUBY

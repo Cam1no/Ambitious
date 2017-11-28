@@ -43,7 +43,7 @@ Rails.application.configure do
   config.assets.debug = true
   config.after_initialize do
     Bullet.enable = true
-    Bullet.alert = true
+    Bullet.alert = false
     Bullet.bullet_logger = true
     Bullet.console = true
     Bullet.rails_logger = true

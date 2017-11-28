@@ -236,6 +236,7 @@ require 'factory_bot_rails'
 require 'vcr'
 require 'simplecov'
 require "webmock/rspec"
+require 'database_cleaner'
 
 SimpleCov.start 'rails'
 
@@ -243,13 +244,13 @@ RUBY
 
 insert_into_file 'spec/spec_helper.rb', <<RUBY, after: 'RSpec.configure do |config|'
 
-  # config.before :suite do
-  #   DatabaseRewinder.clean_all
-  # end
-  #
-  # config.after :each do
-  #   DatabaseRewinder.clean
-  # end
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 
   config.before :all do
     FactoryBot.reload

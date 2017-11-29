@@ -227,9 +227,6 @@ run 'bundle update'
 # Setting Rspec
 # ===================
 run 'bundle exec rails g rspec:install'
-# create_file '.rspec', <<EOF, force: true
-# --color -f d -r turnip/rspec
-# EOF
 
 insert_into_file 'spec/spec_helper.rb', <<RUBY, before: 'RSpec.configure do |config|'
 require 'factory_bot_rails'
@@ -297,8 +294,9 @@ when '3'
   run 'bundle exec rails webpacker:install:react'
 end
 
-run 'bundle exec spring binstub --all'
 run "bundle exec rubocop -a --auto-gen-config"
+
+run 'bundle exec spring binstub --all'
 
 if yes? "Do you delete .git/?"
   run 'rm -rf .git/'

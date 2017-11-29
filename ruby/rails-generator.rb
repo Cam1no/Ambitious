@@ -6,7 +6,14 @@
 # ==================
 # GEMS
 # ==================
-gem 'mysql2'
+
+
+if yes? 'Do you want to use Heroku?'
+  gem_group :production do
+    gem 'rails_12factor'
+  end
+end
+
 gem 'rails-i18n'
 gem 'whenever', require: false
 gem 'slim-rails'
@@ -72,11 +79,6 @@ gem_group :development do
   gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'
-end
-
-gem_group :production do
-  gem 'pg'
-  gem 'rails_12factor'
 end
 
 # devise

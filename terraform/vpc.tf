@@ -1,3 +1,6 @@
+# 参考
+# https://www.terraform.io/docs/providers/aws/
+
 resource "aws_vpc" "vpc-1" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true

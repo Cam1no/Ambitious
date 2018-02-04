@@ -10,3 +10,6 @@
 
 ### Terraform Patch ###
 *.tfvars
+
+### Ansible ###
+*.retry

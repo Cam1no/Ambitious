@@ -73,7 +73,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = "${aws_subnet.vpc-1-public-subnet.id}"
 }
 
-# Private SubnetへのリクエストはNAT Gatewayで置換してリクエスト
+# Private SubnetへのリクエストはNAT Gatewayで禁止する
 # Private SubnetからのリクエストはNAT Gatewayで置換してリクエスト
 resource "aws_route_table" "vpc-1-private-rt" {
   vpc_id = "${aws_vpc.vpc-1.id}"
@@ -121,5 +121,43 @@ resource "aws_security_group" "web-sg" {
 
   tags {
     Name = "web-sg"
+  }
+}
+
+# DB Server用セキュリティーグループ
+resource "aws_security_group" "db-sg" {
+  name   = "db-sg"
+  vpc_id = "${aws_vpc.vpc-1.id}"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "db-sg"
   }
 }

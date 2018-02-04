@@ -1,0 +1,5 @@
+- hosts: web-server
+  remote_user: ec2-user
+  tasks:
+    - name: Hello
+      command: echo Hello!

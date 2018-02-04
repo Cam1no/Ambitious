@@ -123,16 +123,17 @@ application do
 end
 
 # config/environments/development.rb
-insert_into_file 'config/environments/development.rb', <<RUBY, after: 'config.assets.debug = true'
-
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.bullet_logger = true
-    Bullet.console = false
-    Bullet.add_footer = false
-    Bullet.rails_logger = true
-  end
-RUBY
+insert_into_file 'config/environments/development.rb', after: 'config.assets.debug = true' do
+  <<-RUBY
+    config.after_initialize do
+      Bullet.enable = true
+      Bullet.bullet_logger = true
+      Bullet.console = false
+      Bullet.add_footer = false
+      Bullet.rails_logger = true
+    end
+  RUBY
+end
 
 run 'rm -rf test'
 # set up rubocop

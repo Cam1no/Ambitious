@@ -92,3 +92,34 @@ resource "aws_route_table_association" "vpc-1-rta-2" {
   subnet_id      = "${aws_subnet.vpc-1-private-subnet.id}"
   route_table_id = "${aws_route_table.vpc-1-private-rt.id}"
 }
+
+# web serverのセキュリティーグループ
+resource "aws_security_group" "web-sg" {
+  name   = "web-sg"
+  vpc_id = "${aws_vpc.vpc-1.id}"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "web-sg"
+  }
+}

@@ -302,12 +302,10 @@ run 'bundle exec spring binstub --all'
 
 if yes? "Do you delete .git/?"
   run 'rm -rf .git/'
+else
+  after_bundle do
+    git :init
+    git add: "."
+    git commit: %Q{ -m 'Initial commit' }
+  end
 end
-
-
-# git
-# after_bundle do
-#   git :init
-#   git add: "."
-#   git commit: %Q{ -m 'Initial commit' }
-# end

@@ -8,11 +8,11 @@
 # ==================
 
 
-if yes? 'Do you want to use Heroku?'
-  gem_group :production do
-    gem 'rails_12factor'
-  end
-end
+# if yes? 'Do you want to use Heroku?'
+#   gem_group :production do
+#     gem 'rails_12factor'
+#   end
+# end
 
 gem 'rails-i18n'
 gem 'whenever', require: false
@@ -220,85 +220,89 @@ create_file '.ruby-version', <<EOF
 2.4.1
 EOF
 
-run 'bundle install --path vendor/bundle --jobs=4'
-run 'bundle exec spring stop'
+run_bundle
 
-# setting
-run 'bundle update'
+after_bundle do
+  run 'bundle exec spring stop'
 
-# ===================
-# Setting Rspec
-# ===================
-run 'bundle exec rails g rspec:install'
+  # setting
+  run 'bundle update'
 
-insert_into_file 'spec/spec_helper.rb', <<RUBY, before: 'RSpec.configure do |config|'
-require 'factory_bot_rails'
-require 'vcr'
-require 'simplecov'
-require "webmock/rspec"
-require 'database_cleaner'
+  # ===================
+  # Setting Rspec
+  # ===================
+  run 'bundle exec rails g rspec:install'
 
-SimpleCov.start 'rails'
+  insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
+    <<-RUBY
+      require 'factory_bot_rails'
+      require 'vcr'
+      require 'simplecov'
+      require "webmock/rspec"
+      require 'database_cleaner'
 
-RUBY
-
-insert_into_file 'spec/spec_helper.rb', <<RUBY, after: 'RSpec.configure do |config|'
-
-  config.before(:each) do
-    DatabaseCleaner.start
+      SimpleCov.start 'rails'
+    RUBY
   end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
+  insert_into_file 'spec/spec_helper.rb', after: 'RSpec.configure do |config|' do
+    <<-RUBY
+      config.before(:each) do
+        DatabaseCleaner.start
+      end
+
+      config.after(:each) do
+        DatabaseCleaner.clean
+      end
+
+      config.before :all do
+        FactoryBot.reload
+        FactoryBot.factories.clear
+        FactoryBot.sequences.clear
+        FactoryBot.find_definitions
+      end
+
+      config.include FactoryBot::Syntax::Methods
+
+      VCR.configure do |c|
+        c.cassette_library_dir = 'spec/vcr'
+        c.hook_into :webmock
+        c.allow_http_connections_when_no_cassette = true
+      end
+    RUBY
   end
 
-  config.before :all do
-    FactoryBot.reload
-    FactoryBot.factories.clear
-    FactoryBot.sequences.clear
-    FactoryBot.find_definitions
+  # setting kaminari
+  run 'bundle exec rails g kaminari:config'
+
+  # Initialize guard
+  run "bundle exec guard init rspec"
+  # convert erb file to slim
+  run 'bundle exec erb2slim -d app/views'
+
+  # setting whenever
+  run 'bundle exec wheneverize .'
+
+  run 'mkdir app/services'
+  run 'mkdir app/tasks'
+  run 'mkdir app/serializers'
+
+  # setting frontend
+  front_resorce = ask("choise front-end 'none:1' or 'react:2' ")
+  case front_resorce
+  when '1'
+    return
+  when '2'
+    run 'bundle exec rails webpacker:install'
+    run 'bundle exec rails webpacker:install:react'
+  else
+    return
   end
 
-  config.include FactoryBot::Syntax::Methods
+  run "bundle exec rubocop -a --auto-gen-config"
 
-  VCR.configure do |c|
-    c.cassette_library_dir = 'spec/vcr'
-    c.hook_into :webmock
-    c.allow_http_connections_when_no_cassette = true
-  end
-RUBY
-
-
-# setting kaminari
-run 'bundle exec rails g kaminari:config'
-
-# Initialize guard
-run "bundle exec guard init rspec"
-# convert erb file to slim
-run 'bundle exec erb2slim -d app/views'
-
-# setting whenever
-run 'bundle exec wheneverize .'
-
-run 'mkdir app/services'
-run 'mkdir app/tasks'
-run 'mkdir app/serializers'
-
-# setting frontend
-front_resorce = ask("choise front-end 'none:1' or 'react:2' ")
-case front_resorce
-when '1'
-  return
-when '2'
-  run 'bundle exec rails webpacker:install'
-  run 'bundle exec rails webpacker:install:react'
-else
-  return
+  run 'bundle exec spring binstub --all'
 end
-
-run "bundle exec rubocop -a --auto-gen-config"
-
-run 'bundle exec spring binstub --all'
 
 if yes? "Do you delete .git/?"
   run 'rm -rf .git/'

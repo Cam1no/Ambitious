@@ -24,6 +24,7 @@ gem 'sass-rails'
 gem 'puma'
 gem 'draper'
 gem 'ransack'
+gem 'mysql2'
 
 # image
 gem 'refile', require: 'refile/rails', github: 'manfe/refile'
@@ -290,7 +291,7 @@ when '1'
   return
 when '2'
   run 'bundle exec rails webpacker:install'
-  run 'bundle exec rails webpacker:install:vue'
+  run 'bundle exec rails webpacker:install:react'
 else
   return
 end

@@ -53,7 +53,6 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'mysql2'
 gem 'rails-i18n'
 gem 'whenever', require: false
 gem 'slim-rails'
@@ -62,6 +61,7 @@ gem 'active_model_serializers'
 gem 'webpacker'
 gem 'draper'
 gem 'ransack'
+gem 'mysql2'
 gem 'refile', require: 'refile/rails', github: 'manfe/refile'
 gem 'refile-mini_magick'
 gem 'refile-s3'
@@ -107,11 +107,6 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'
-end
-
-group :production do
-  gem 'pg'
-  gem 'rails_12factor'
 end
 
 gem 'devise'

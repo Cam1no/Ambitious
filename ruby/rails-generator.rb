@@ -284,16 +284,15 @@ run 'mkdir app/tasks'
 run 'mkdir app/serializers'
 
 # setting frontend
-front_resorce = ask("choise front-end 'none:1' or 'vue:2' or 'react:3' ")
+front_resorce = ask("choise front-end 'none:1' or 'react:2' ")
 case front_resorce
 when '1'
   return
 when '2'
   run 'bundle exec rails webpacker:install'
   run 'bundle exec rails webpacker:install:vue'
-when '3'
-  run 'bundle exec rails webpacker:install'
-  run 'bundle exec rails webpacker:install:react'
+else
+  return
 end
 
 run "bundle exec rubocop -a --auto-gen-config"

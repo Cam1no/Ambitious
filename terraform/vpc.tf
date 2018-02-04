@@ -72,3 +72,23 @@ resource "aws_nat_gateway" "nat" {
   allocation_id = "${aws_eip.nat.id}"
   subnet_id     = "${aws_subnet.vpc-1-public-subnet.id}"
 }
+
+# Private SubnetへのリクエストはNAT Gatewayで置換してリクエスト
+# Private SubnetからのリクエストはNAT Gatewayで置換してリクエスト
+resource "aws_route_table" "vpc-1-private-rt" {
+  vpc_id = "${aws_vpc.vpc-1.id}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_nat_gateway.nat.id}"
+  }
+
+  tags {
+    Name = "vpc-1-private-rt"
+  }
+}
+
+resource "aws_route_table_association" "vpc-1-rta-2" {
+  subnet_id      = "${aws_subnet.vpc-1-private-subnet.id}"
+  route_table_id = "${aws_route_table.vpc-1-private-rt.id}"
+}

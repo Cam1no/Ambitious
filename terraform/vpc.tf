@@ -62,3 +62,13 @@ resource "aws_route_table_association" "vpc-1-rta-1" {
   subnet_id      = "${aws_subnet.vpc-1-public-subnet.id}"
   route_table_id = "${aws_route_table.vpc-1-public-rt.id}"
 }
+
+# NATの構築
+resource "aws_eip" "nat" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = "${aws_eip.nat.id}"
+  subnet_id     = "${aws_subnet.vpc-1-public-subnet.id}"
+}

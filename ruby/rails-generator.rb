@@ -310,6 +310,6 @@ else
   after_bundle do
     git :init
     git add: "."
-    git commit: %Q{ -m 'Initial commit' }
+    git commit: %Q{ -m 'Initial Settings' }
   end
 end

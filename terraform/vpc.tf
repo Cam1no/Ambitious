@@ -74,8 +74,9 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = "${aws_subnet.vpc-1-public-subnet.id}"
 }
 
-# Private SubnetへのリクエストはNAT Gatewayで禁止する
+# インターネットからPrivateへの接続は禁止
 # Private SubnetからのリクエストはNAT Gatewayで置換してリクエスト
+# インターネットからPrivate Subnetに接続する場合は、NAT Gatewayで置換して接続
 resource "aws_route_table" "vpc-1-private-rt" {
   vpc_id = "${aws_vpc.vpc-1.id}"
 

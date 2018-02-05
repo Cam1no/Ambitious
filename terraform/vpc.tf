@@ -43,8 +43,8 @@ resource "aws_internet_gateway" "vpc-1-igw" {
   }
 }
 
-# cidr_block 0.0.0.0/0のIPでリクエストされると
-# internet Gatewayにルーティング
+# publicはこのままだと、10.0.0.0/16の宛先のパケットは全て破棄されてしまう
+# 0.0.0.0/0の範囲、つまり全ての宛先のパケットは、internet gatewayに転送する
 resource "aws_route_table" "vpc-1-public-rt" {
   vpc_id = "${aws_vpc.vpc-1.id}"
 
@@ -58,6 +58,7 @@ resource "aws_route_table" "vpc-1-public-rt" {
   }
 }
 
+# 上記で作成したルートテーブルをサブネットに割り当てる
 resource "aws_route_table_association" "vpc-1-rta-1" {
   subnet_id      = "${aws_subnet.vpc-1-public-subnet.id}"
   route_table_id = "${aws_route_table.vpc-1-public-rt.id}"
@@ -98,6 +99,7 @@ resource "aws_security_group" "web-sg" {
   name   = "web-sg"
   vpc_id = "${aws_vpc.vpc-1.id}"
 
+  # SSHできるように22番ポート開放
   ingress {
     from_port   = 22
     to_port     = 22
@@ -105,6 +107,7 @@ resource "aws_security_group" "web-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # HTTPリクエストできるように280番ポート開放
   ingress {
     from_port   = 80
     to_port     = 80
@@ -129,6 +132,7 @@ resource "aws_security_group" "db-sg" {
   name   = "db-sg"
   vpc_id = "${aws_vpc.vpc-1.id}"
 
+  # SSHできるように22番ポート開放
   ingress {
     from_port   = 22
     to_port     = 22
@@ -136,6 +140,7 @@ resource "aws_security_group" "db-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # MySQLに接続するための3306番ポート開放
   ingress {
     from_port   = 3306
     to_port     = 3306

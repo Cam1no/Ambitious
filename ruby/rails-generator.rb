@@ -284,9 +284,14 @@ after_bundle do
   # setting whenever
   run 'bundle exec wheneverize .'
 
+  # 参考 https://qiita.com/ktsujichan/items/2899d337ecbd90474c46
   run 'mkdir app/services'
   run 'mkdir app/tasks'
   run 'mkdir app/serializers'
+  run 'mkdir app/callbacks'
+  run 'mkdir app/exceptions'
+  run 'mkdir app/utils'
+  run 'mkdir app/validators'
 
   # setting frontend
   front_resorce = ask("choise front-end 'none:1' or 'react:2' ")

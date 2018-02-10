@@ -544,6 +544,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-i18n
   ransack
+  redis
   redis-rails
   refile!
   refile-mini_magick

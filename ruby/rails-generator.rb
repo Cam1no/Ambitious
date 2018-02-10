@@ -28,6 +28,7 @@ gem 'ransack'
 gem 'mysql2'
 gem 'toastr_rails'
 gem 'font-awesome-rails'
+gem 'redis'
 gem 'redis-rails'
 gem 'view_source_map'
 gem 'enumerize'
@@ -143,13 +144,13 @@ end
 insert_into_file 'config/environments/development.rb', after: 'config.assets.debug = true' do
   <<~RUBY
 
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.bullet_logger = true
-    Bullet.console = false
-    Bullet.add_footer = false
-    Bullet.rails_logger = true
-  end
+    config.after_initialize do
+      Bullet.enable = true
+      Bullet.bullet_logger = true
+      Bullet.console = false
+      Bullet.add_footer = false
+      Bullet.rails_logger = true
+    end
   RUBY
 end
 

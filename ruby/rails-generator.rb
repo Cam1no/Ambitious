@@ -26,6 +26,12 @@ gem 'puma'
 gem 'draper'
 gem 'ransack'
 gem 'mysql2'
+gem 'toastr_rails'
+gem 'font-awesome-rails'
+gem 'redis-rails'
+gem 'view_source_map'
+gem 'enumerize'
+gem 'rufo'
 
 # image
 gem 'refile', require: 'refile/rails', github: 'manfe/refile'
@@ -53,6 +59,8 @@ gem_group :development, :test do
   gem "database_cleaner"
   gem 'vcr'
   gem 'database_rewinder'
+  gem 'capybara'
+  gem 'selenium-webdriver'
 
   # other
   gem 'rubocop', '~> 0.49.0'
@@ -77,7 +85,7 @@ gem_group :development do
   gem 'rufo'
   # guard
   gem 'guard-rspec', require: false
-  # gem 'guard-rubocop'
+  gem 'guard-rubocop'
   gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'

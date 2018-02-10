@@ -58,6 +58,7 @@ gem 'whenever', require: false
 gem 'slim-rails'
 gem 'kaminari'
 gem 'active_model_serializers'
+gem 'fast_jsonapi'
 gem 'webpacker'
 gem 'draper'
 gem 'ransack'

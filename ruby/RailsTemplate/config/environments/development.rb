@@ -41,13 +41,13 @@ Rails.application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.bullet_logger = true
-    Bullet.console = false
-    Bullet.add_footer = false
-    Bullet.rails_logger = true
-  end
+config.after_initialize do
+  Bullet.enable = true
+  Bullet.bullet_logger = true
+  Bullet.console = false
+  Bullet.add_footer = false
+  Bullet.rails_logger = true
+end
 
 
   # Suppress logger output for asset requests.

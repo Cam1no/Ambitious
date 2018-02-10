@@ -19,6 +19,7 @@ gem 'whenever', require: false
 gem 'slim-rails'
 gem 'kaminari'
 gem 'active_model_serializers'
+gem 'fast_jsonapi' #https://github.com/Netflix/fast_jsonapi
 gem 'webpacker'
 gem 'sass-rails'
 gem 'puma'
@@ -125,15 +126,15 @@ end
 # config/environments/development.rb
 # 謎な一行が大事！この一行がないとシンタックスエラー起こす
 insert_into_file 'config/environments/development.rb', after: 'config.assets.debug = true' do
-  <<-RUBY
+  <<~RUBY
 
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.bullet_logger = true
-    Bullet.console = false
-    Bullet.add_footer = false
-    Bullet.rails_logger = true
-  end
+    config.after_initialize do
+      Bullet.enable = true
+      Bullet.bullet_logger = true
+      Bullet.console = false
+      Bullet.add_footer = false
+      Bullet.rails_logger = true
+    end
   RUBY
 end
 
@@ -237,41 +238,43 @@ after_bundle do
   run 'bundle exec rails g rspec:install'
 
   insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
-    <<-RUBY
-    require 'factory_bot_rails'
-    require 'vcr'
-    require 'simplecov'
-    require "webmock/rspec"
-    require 'database_cleaner'
+    <<~RUBY
 
-    SimpleCov.start 'rails'
+      require 'factory_bot_rails'
+      require 'vcr'
+      require 'simplecov'
+      require "webmock/rspec"
+      require 'database_cleaner'
+
+      SimpleCov.start 'rails'
     RUBY
   end
 
   insert_into_file 'spec/spec_helper.rb', after: 'RSpec.configure do |config|' do
-    <<-RUBY
-    config.before(:each) do
-      DatabaseCleaner.start
-    end
+    <<~RUBY
 
-    config.after(:each) do
-      DatabaseCleaner.clean
-    end
+      config.before(:each) do
+        DatabaseCleaner.start
+      end
 
-    config.before :all do
-      FactoryBot.reload
-      FactoryBot.factories.clear
-      FactoryBot.sequences.clear
-      FactoryBot.find_definitions
-    end
+      config.after(:each) do
+        DatabaseCleaner.clean
+      end
 
-    config.include FactoryBot::Syntax::Methods
+      config.before :all do
+        FactoryBot.reload
+        FactoryBot.factories.clear
+        FactoryBot.sequences.clear
+        FactoryBot.find_definitions
+      end
 
-    VCR.configure do |c|
-      c.cassette_library_dir = 'spec/vcr'
-      c.hook_into :webmock
-      c.allow_http_connections_when_no_cassette = true
-    end
+      config.include FactoryBot::Syntax::Methods
+
+      VCR.configure do |c|
+        c.cassette_library_dir = 'spec/vcr'
+        c.hook_into :webmock
+        c.allow_http_connections_when_no_cassette = true
+      end
     RUBY
   end
 
@@ -294,6 +297,8 @@ after_bundle do
   run 'mkdir app/exceptions'
   run 'mkdir app/utils'
   run 'mkdir app/validators'
+  run 'mkdir app/notifiers'
+  run 'mkdir app/forms'
 
   # setting frontend
   front_resorce = ask("choise front-end 'none:1' or 'react:2' ")

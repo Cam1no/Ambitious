@@ -74,7 +74,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-stack_explorer'
   gem 'hirb'
-  gem 'hirb-unicode'
   gem 'rspec-rails'
   gem 'rails-controller-testing'
   gem 'webmock'
@@ -83,7 +82,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'vcr'
   gem 'database_rewinder'
-  gem 'rubocop'
+  gem 'rubocop', '~> 0.49.0'
   gem 'dotenv-rails'
   gem 'simplecov', require: false
 end
@@ -104,7 +103,6 @@ group :development do
   gem 'rack-mini-profiler'
   gem 'rufo'
   gem 'guard-rspec', require: false
-  gem 'guard-rubocop'
   gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'

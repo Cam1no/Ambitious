@@ -42,7 +42,7 @@ gem_group :development, :test do
   gem "pry-byebug"
   gem 'pry-stack_explorer'
   gem "hirb"
-  gem "hirb-unicode"
+  # gem "hirb-unicode"
 
   # rspec
   gem 'rspec-rails'
@@ -55,7 +55,7 @@ gem_group :development, :test do
   gem 'database_rewinder'
 
   # other
-  gem 'rubocop'
+  gem 'rubocop', '~> 0.49.0'
   gem 'dotenv-rails'
   gem 'simplecov', require: false
 end
@@ -77,7 +77,7 @@ gem_group :development do
   gem 'rufo'
   # guard
   gem 'guard-rspec', require: false
-  gem 'guard-rubocop'
+  # gem 'guard-rubocop'
   gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'

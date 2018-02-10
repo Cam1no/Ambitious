@@ -7,7 +7,6 @@
 # GEMS
 # ==================
 
-
 # if yes? 'Do you want to use Heroku?'
 #   gem_group :production do
 #     gem 'rails_12factor'
@@ -158,6 +157,33 @@ create_file 'config/initializers/active_model_serializers.rb', <<RUBY
 ActiveModel::Serializer.config.adapter = :json
 RUBY
 
+create_file '.rufo', <<-EOF
+indent_size                 2
+spaces_inside_hash_brace    :always
+spaces_inside_array_bracket :never
+spaces_around_equal         :one
+spaces_in_ternary           :one
+spaces_in_suffix            :one
+spaces_in_commands          :dynamic
+spaces_around_block_brace   :one
+spaces_after_comma          :dynamic
+spaces_around_hash_arrow    :one
+spaces_around_when          :one
+spaces_around_dot           :no
+spaces_after_lambda_arrow   :no
+spaces_around_unary         :no
+spaces_around_binary        :one
+parens_in_def               :yes
+double_newline_inside_type  :no
+visibility_indent           :align
+trailing_commas             :never
+align_comments              true
+align_assignments           true
+align_hash_keys             true
+align_case_when             true
+align_chained_calls         true
+EOF
+
 run 'rm -rf test'
 # set up rubocop
 create_file '.rubocop.yml', <<YAML
@@ -258,44 +284,44 @@ after_bundle do
   run 'bundle exec rails g rspec:install'
 
   insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
-  <<~RUBY
+    <<~RUBY
 
-  require 'factory_bot_rails'
-  require 'vcr'
-  require 'simplecov'
-  require "webmock/rspec"
-  require 'database_cleaner'
-  SimpleCov.start 'rails'
+      require 'factory_bot_rails'
+      require 'vcr'
+      require 'simplecov'
+      require "webmock/rspec"
+      require 'database_cleaner'
+      SimpleCov.start 'rails'
 
-  RUBY
+    RUBY
   end
 
   insert_into_file 'spec/spec_helper.rb', after: 'RSpec.configure do |config|' do
-  <<~RUBY
+    <<~RUBY
 
-    config.before(:each) do
-      DatabaseCleaner.start
-    end
+      config.before(:each) do
+        DatabaseCleaner.start
+      end
 
-    config.after(:each) do
-      DatabaseCleaner.clean
-    end
+      config.after(:each) do
+        DatabaseCleaner.clean
+      end
 
-    config.before :all do
-      FactoryBot.reload
-      FactoryBot.factories.clear
-      FactoryBot.sequences.clear
-      FactoryBot.find_definitions
-    end
+      config.before :all do
+        FactoryBot.reload
+        FactoryBot.factories.clear
+        FactoryBot.sequences.clear
+        FactoryBot.find_definitions
+      end
 
-    config.include FactoryBot::Syntax::Methods
+      config.include FactoryBot::Syntax::Methods
 
-    VCR.configure do |c|
-      c.cassette_library_dir = 'spec/vcr'
-      c.hook_into :webmock
-      c.allow_http_connections_when_no_cassette = true
-    end
-  RUBY
+      VCR.configure do |c|
+        c.cassette_library_dir = 'spec/vcr'
+        c.hook_into :webmock
+        c.allow_http_connections_when_no_cassette = true
+      end
+    RUBY
   end
 
   # setting kaminari

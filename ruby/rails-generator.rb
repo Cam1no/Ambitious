@@ -128,15 +128,19 @@ end
 insert_into_file 'config/environments/development.rb', after: 'config.assets.debug = true' do
   <<~RUBY
 
-    config.after_initialize do
-      Bullet.enable = true
-      Bullet.bullet_logger = true
-      Bullet.console = false
-      Bullet.add_footer = false
-      Bullet.rails_logger = true
-    end
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.console = false
+    Bullet.add_footer = false
+    Bullet.rails_logger = true
+  end
   RUBY
 end
+
+create_file 'config/initializers/active_model_serializers.rb', <<RUBY
+ActiveModel::Serializer.config.adapter = :json
+RUBY
 
 run 'rm -rf test'
 # set up rubocop
@@ -238,44 +242,44 @@ after_bundle do
   run 'bundle exec rails g rspec:install'
 
   insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
-    <<~RUBY
+  <<~RUBY
 
-      require 'factory_bot_rails'
-      require 'vcr'
-      require 'simplecov'
-      require "webmock/rspec"
-      require 'database_cleaner'
+  require 'factory_bot_rails'
+  require 'vcr'
+  require 'simplecov'
+  require "webmock/rspec"
+  require 'database_cleaner'
+  SimpleCov.start 'rails'
 
-      SimpleCov.start 'rails'
-    RUBY
+  RUBY
   end
 
   insert_into_file 'spec/spec_helper.rb', after: 'RSpec.configure do |config|' do
-    <<~RUBY
+  <<-RUBY
 
-      config.before(:each) do
-        DatabaseCleaner.start
-      end
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
 
-      config.after(:each) do
-        DatabaseCleaner.clean
-      end
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
 
-      config.before :all do
-        FactoryBot.reload
-        FactoryBot.factories.clear
-        FactoryBot.sequences.clear
-        FactoryBot.find_definitions
-      end
+    config.before :all do
+      FactoryBot.reload
+      FactoryBot.factories.clear
+      FactoryBot.sequences.clear
+      FactoryBot.find_definitions
+    end
 
-      config.include FactoryBot::Syntax::Methods
+    config.include FactoryBot::Syntax::Methods
 
-      VCR.configure do |c|
-        c.cassette_library_dir = 'spec/vcr'
-        c.hook_into :webmock
-        c.allow_http_connections_when_no_cassette = true
-      end
-    RUBY
+    VCR.configure do |c|
+      c.cassette_library_dir = 'spec/vcr'
+      c.hook_into :webmock
+      c.allow_http_connections_when_no_cassette = true
+    end
+  RUBY
   end
 
   # setting kaminari

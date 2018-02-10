@@ -1,9 +1,11 @@
-# Rails Template
+# Rails
 
 ```ruby
 rails new AppName -m path/to/rails-generator.rb
 ```
 
+
+# Terraform
 ```bash
 terraform init
 terraform plan -var-file="config.tfvars"

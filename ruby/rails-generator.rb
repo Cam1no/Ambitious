@@ -81,6 +81,13 @@ gem_group :development do
   gem 'spring-commands-rspec'
   gem 'terminal-notifier'
   gem 'terminal-notifier-guard'
+
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-yarn'
+  gem 'capistrano3-unicorn'
 end
 
 # devise
@@ -255,7 +262,7 @@ after_bundle do
   end
 
   insert_into_file 'spec/spec_helper.rb', after: 'RSpec.configure do |config|' do
-  <<-RUBY
+  <<~RUBY
 
     config.before(:each) do
       DatabaseCleaner.start
@@ -292,6 +299,8 @@ after_bundle do
 
   # setting whenever
   run 'bundle exec wheneverize .'
+
+  run 'bundle exec cap install'
 
   # 参考 https://qiita.com/ktsujichan/items/2899d337ecbd90474c46
   run 'mkdir app/services'

@@ -19,31 +19,31 @@ require 'vcr'
 require 'simplecov'
 require "webmock/rspec"
 require 'database_cleaner'
-
 SimpleCov.start 'rails'
+
 RSpec.configure do |config|
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
+config.before(:each) do
+  DatabaseCleaner.start
+end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
+config.after(:each) do
+  DatabaseCleaner.clean
+end
 
-  config.before :all do
-    FactoryBot.reload
-    FactoryBot.factories.clear
-    FactoryBot.sequences.clear
-    FactoryBot.find_definitions
-  end
+config.before :all do
+  FactoryBot.reload
+  FactoryBot.factories.clear
+  FactoryBot.sequences.clear
+  FactoryBot.find_definitions
+end
 
-  config.include FactoryBot::Syntax::Methods
+config.include FactoryBot::Syntax::Methods
 
-  VCR.configure do |c|
-    c.cassette_library_dir = 'spec/vcr'
-    c.hook_into :webmock
-    c.allow_http_connections_when_no_cassette = true
-  end
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/vcr'
+  c.hook_into :webmock
+  c.allow_http_connections_when_no_cassette = true
+end
 
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
